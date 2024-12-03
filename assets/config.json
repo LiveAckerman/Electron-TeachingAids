@@ -1,6 +1,7 @@
 {
   "dev": {
-    "system-web-url": "http://127.0.0.1:8500/login" // 系统前端地址
+    "system-web-url": "http://127.0.0.1:3000/login" // 系统前端地址
+    // "system-web-url": "http://127.0.0.1:8500/login" // 系统前端地址
   },
   "prod": {
     // "system-web-url": "http://127.0.0.1:13715/" // 系统前端地址

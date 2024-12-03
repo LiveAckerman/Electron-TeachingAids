@@ -16,12 +16,14 @@ module.exports = {
     hooks: {
         postPackage: async (forgeConfig, options) => {
             if (options.outputPaths && options.outputPaths.length) {
-                const localesDirectory = path.join(options.outputPaths[0], './locales'); // 路径根据实际情况调整
-                fs.rmdir(localesDirectory, { recursive: true }, error => {
-                    if (error) {
-                        return console.error(`无法删除文件夹: ${error}`);
+                const localesDirectory = path.join(options.outputPaths[0], '/locales'); // 路径根据实际情况调整
+                const localesFileArr = fs.readdirSync(localesDirectory);
+                localesFileArr.forEach(lang => {
+                    if (!lang.includes('en-US') && !lang.includes('zh-CN')) {
+                        fs.unlink(`${localesDirectory}/${lang}`, err => {
+                            throw err;
+                        });
                     }
-                    console.log('locales文件夹已删除');
                 });
             }
         },

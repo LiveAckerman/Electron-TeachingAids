@@ -2,30 +2,29 @@ const { app, BrowserWindow, Menu, ipcMain, BrowserView } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
-/* 设置菜单按钮 */
-Menu.setApplicationMenu(null); // null值取消顶部菜单栏
-const contextMenu = Menu.buildFromTemplate([
-    { role: 'appMenu', label: '应用' },
-    { role: 'fileMenu', label: '文件' },
-    { role: 'editMenu', label: '设置' },
-    { role: 'viewMenu', label: '视图' },
-    { role: 'windowMenu', label: '窗口' },
-    {
-        role: 'help',
-        label: '帮助',
-        submenu: [
-            {
-                label: '关于',
-                click: async () => {
-                    const { shell } = require('electron');
-                    await shell.openExternal('http://119.23.104.214/');
-                },
-            },
-        ],
-    },
-]);
-
 function initSet(win) {
+    /* 设置菜单按钮 */
+    Menu.setApplicationMenu(null); // null值取消顶部菜单栏
+    const contextMenu = Menu.buildFromTemplate([
+        { role: 'appMenu', label: '应用' },
+        { role: 'fileMenu', label: '文件' },
+        { role: 'editMenu', label: '设置' },
+        { role: 'viewMenu', label: '视图' },
+        { role: 'windowMenu', label: '窗口' },
+        {
+            role: 'help',
+            label: '帮助',
+            submenu: [
+                {
+                    label: '关于',
+                    click: async () => {
+                        const { shell } = require('electron');
+                        await shell.openExternal('http://119.23.104.214/');
+                    },
+                },
+            ],
+        },
+    ]);
     win.setIcon(path.join(root_path, '/assets/logo-white.png'));
     const wc = win.webContents;
     // 点击右键时弹窗菜单
@@ -59,10 +58,6 @@ fs.readFile(configPath, 'utf8', (err, rawData) => {
             },
         });
 
-        setTimeout(() => {
-            initSet(win);
-        }, 1);
-
         // electron 判断是否是生产环境
         win.loadURL(config['system-web-url'])
             .then(() => {
@@ -91,6 +86,11 @@ fs.readFile(configPath, 'utf8', (err, rawData) => {
             })
             .catch(err => {
                 win.loadFile(path.join(root_path, '/assets/404.html'));
+            })
+            .finally(() => {
+                setTimeout(() => {
+                    initSet(win);
+                }, 1);
             });
     };
 
