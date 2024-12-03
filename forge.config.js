@@ -16,13 +16,12 @@ module.exports = {
     hooks: {
         postPackage: async (forgeConfig, options) => {
             if (options.outputPaths && options.outputPaths.length) {
+                // 删除多余的语言包
                 const localesDirectory = path.join(options.outputPaths[0], '/locales'); // 路径根据实际情况调整
                 const localesFileArr = fs.readdirSync(localesDirectory);
                 localesFileArr.forEach(lang => {
                     if (!lang.includes('en-US') && !lang.includes('zh-CN')) {
-                        fs.unlink(`${localesDirectory}/${lang}`, err => {
-                            throw err;
-                        });
+                        fs.unlink(`${localesDirectory}/${lang}`);
                     }
                 });
             }
